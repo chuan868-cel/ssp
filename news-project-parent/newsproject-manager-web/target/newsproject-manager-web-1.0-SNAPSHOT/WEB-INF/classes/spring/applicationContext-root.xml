@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:p="http://www.springframework.org/schema/p"
+	   xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:aop="http://www.springframework.org/schema/aop"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd
+		http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+	<!--引入 要加载的 Spring配置文件-->
+	<!--<import resource="classpath:spring/spring-jms-producer.xml"/>-->
+	<context:component-scan base-package="com.oracle">
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>
+	<aop:aspectj-autoproxy/>
+	<!-- 引用dubbo 服务 -->
+	<dubbo:application name="manager-web" />
+	<!-- Dubbo 协议及 服务端口号 -->
+	 <dubbo:protocol  name="dubbo" port="20880"></dubbo:protocol>
+	<dubbo:protocol  name="dubbo" port="20881"></dubbo:protocol>
+	<dubbo:protocol  name="dubbo" port="20882"></dubbo:protocol>
+	<dubbo:registry address="zookeeper://192.168.25.128:2181?backup=192.168.25.129:2181,192.168.25.130:2181"/>
+	<!-- 检查  当服务启动时 没有找到  提供者是否报错   以免影响循环依赖服务
+		服务超时时间  单位为毫秒
+		向服务器 进行  订阅 一个需要的服务
+	-->
+	<!--管理员服务
+		当 dubbo 服务 需要 循环依赖 时  不做检查
+	-->
+	<dubbo:reference id="adminServiceApi" interface="com.oracle.admin.service.api.AdminService"  check="false" timeout="600000"></dubbo:reference>
+	<dubbo:reference id="roleServiceApi" interface="com.oracle.admin.service.api.RoleService"  check="false" timeout="600000"></dubbo:reference>
+	<dubbo:reference id="perServiceApi" interface="com.oracle.admin.service.api.PerService"  check="false" timeout="600000"></dubbo:reference>
+	<!--新闻服务-->
+	<dubbo:reference id="newsServiceApi" interface="com.oracle.news.service.api.NewsService"  check="false" timeout="600000"></dubbo:reference>
+	<dubbo:reference id="newsCatalogServiceApi" interface="com.oracle.news.service.api.NewsCatalogService" check="false" timeout="600000"></dubbo:reference>
+	<!--日志服务-->
+	<dubbo:reference id="logServiceApi" interface="com.oracle.log.service.api.LogService" check="false" timeout="600000">
+		<dubbo:method name="save" async="true" />
+	</dubbo:reference>
+</beans>

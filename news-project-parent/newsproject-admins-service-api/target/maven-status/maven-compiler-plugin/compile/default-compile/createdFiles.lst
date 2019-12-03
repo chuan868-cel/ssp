@@ -1,0 +1,3 @@
+com\oracle\admins\service\spi\RoleService.class
+com\oracle\admins\service\spi\PerService.class
+com\oracle\admins\service\spi\AdminService.class

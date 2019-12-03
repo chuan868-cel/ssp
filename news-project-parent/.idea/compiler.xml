@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="newsproject-admins-service" />
+        <module name="newsproject-admins-service-api" />
+        <module name="newsproject-application" />
+        <module name="newsproject-cache-service" />
+        <module name="newsproject-common" />
+        <module name="newsproject-data-process" />
+        <module name="newsproject-logs" />
+        <module name="newsproject-logs-api" />
+        <module name="newsproject-manager-web" />
+        <module name="newsproject-mapper" />
+        <module name="newsproject-member-api" />
+        <module name="newsproject-member-register" />
+        <module name="newsproject-member-service" />
+        <module name="newsproject-news-service" />
+        <module name="newsproject-news-service-api" />
+        <module name="newsproject-pojo" />
+        <module name="newsproject-seach-api" />
+        <module name="newsproject-search-serive" />
+        <module name="newsproject-search-web" />
+      </profile>
+    </annotationProcessing>
+  </component>
+</project>

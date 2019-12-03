@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:cache="http://www.springframework.org/schema/cache"
+	xsi:schemaLocation="http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache-4.1.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd">
+	
+	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		<property name="securityManager" ref="securityManager" />
+		<!-- 登录页 -->
+		<property name="loginUrl" value="/admin/login.jsp" />
+		<!-- 认证成功后跳转的请求-->
+		<property name="successUrl" value="/admin/common/main" />
+		<!-- 没有权限时的请求-->
+		<property name="unauthorizedUrl" value="/admin/common/unauthorized" />
+		<property name="filterChainDefinitions">
+			<value>
+			
+				/ = authc
+				/admin/login.jsp = authc
+				/admin/logout.jsp = logout
+				/admin/news/** = perms["admin:news"]
+				/admin/order/** = perms["admin:order"]
+				/admin/system/** = perms["admin:system"]
+				/admin/** = authc
+			</value>
+		</property>
+		<property name="filters">
+			<map>
+				<entry key="authc" value-ref="authenticationFilter" />
+				<entry key="logout" value-ref="logoutFilter" />
+			</map>
+		</property>
+	</bean>
+	
+	
+	<bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+		<property name="cacheManagerConfigFile" value="classpath:spring/shiro-cache.xml"></property>
+	</bean>	
+	
+	
+	<bean id="logoutFilter" class="org.apache.shiro.web.filter.authc.LogoutFilter">
+        <property name="redirectUrl" value="/admin/login.jsp" />
+    </bean> 
+    
+    
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<property name="realm" ref="authenticationRealm" />
+		<property name="cacheManager" ref="cacheManager"></property>
+	</bean>
+	<!-- 自定义的域 编写 登录  鉴权 的 实现   new  异常  页面 中判断-->
+	<bean id="authenticationRealm" class="com.oracle.shiro.AuthenticationRealm">
+	</bean>
+
+	<!-- 监听登录页而得表单提交   获取 用户名和密码  及 自己添加实现的  验证码  机制 token-->
+	<bean id="authenticationFilter" class="com.oracle.filter.AuthenticationFilter" />
+
+ 	<!-- shiro 内部使用 将一个静态方法 返回值 注册 为bean 组件-->
+	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="staticMethod" value="org.apache.shiro.SecurityUtils.setSecurityManager" />
+		<property name="arguments" ref="securityManager" />
+	</bean>
+
+</beans>

@@ -1,0 +1,9 @@
+com\oracle\mapper\NewsCatalogMapper.class
+com\oracle\mapper\NewsMapper.class
+com\oracle\mapper\RolesAdminsMapper.class
+com\oracle\mapper\LogMapper.class
+com\oracle\mapper\MemberMapper.class
+com\oracle\mapper\PermissionMapper.class
+com\oracle\mapper\AdminsMapper.class
+com\oracle\mapper\RolesMapper.class
+com\oracle\mapper\RolesPersMapper.class
